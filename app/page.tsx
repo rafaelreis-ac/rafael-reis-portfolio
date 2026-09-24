@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import {
   ArrowRight,
@@ -8,11 +9,12 @@ import {
   Database,
   Globe,
   GraduationCap,
+  Menu,
   Mail,
   Network,
+  X,
   Wrench,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SectionTitle } from "../components/SectionTitle";
 import { ProjectCard } from "../components/ProjectCard";
@@ -49,22 +51,62 @@ const contactIcons: Record<string, typeof Globe> = {
 };
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#05070b] text-slate-100">
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-[#05070b]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <a href="#top" className="text-xs font-black uppercase tracking-[0.28em] text-white">
+      <header className="sticky top-0 z-50 border-b border-slate-800/70 bg-[#05070b]/85 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
+          <a
+            href="#top"
+            onClick={() => setIsMenuOpen(false)}
+            className="text-xs font-black uppercase tracking-[0.28em] text-white transition-colors hover:text-sky-300"
+          >
             {hero.name}
           </a>
 
-          <nav className="hidden items-center gap-6 md:flex">
+          <nav className="hidden items-center gap-1 md:flex">
             {navigation.map((item) => (
-              <a key={item.href} href={item.href} className="text-sm text-slate-300 transition hover:text-white">
+              <a
+                key={item.href}
+                href={item.href}
+                className="group relative px-3 py-2 text-sm text-slate-400 transition-colors hover:text-white"
+              >
                 {item.label}
+                <span className="absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-sky-300 transition-transform duration-300 group-hover:scale-x-100" />
               </a>
             ))}
           </nav>
+
+          <button
+            type="button"
+            aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((open) => !open)}
+            className="rounded-lg border border-slate-800 p-2 text-slate-300 transition hover:border-sky-400/50 hover:text-white md:hidden"
+          >
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+
+        {isMenuOpen && (
+          <nav className="border-t border-slate-800/70 px-6 py-3 md:hidden">
+            <div className="mx-auto flex max-w-6xl flex-col gap-1">
+              {navigation.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`rounded-lg px-3 py-3 text-sm transition-colors hover:bg-slate-900 hover:text-white ${
+                    item.label === "Contato" ? "text-sky-300" : "text-slate-300"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
       </header>
 
       <main id="top" className="mx-auto max-w-6xl px-6 pb-20 pt-8 md:pt-12">
